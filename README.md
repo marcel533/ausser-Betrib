@@ -5,4 +5,3 @@ Eine minimalistische, reine HTML/CSS-Wartungsseite im industriellen Cyberpunk- u
 
 ---
 The css is fully generated with AI
----
