@@ -2,252 +2,271 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>außer Betrieb</title>
-<link rel="preconnect" href="https://fonts.bunny.net">
-<link href="https://fonts.bunny.net/css?family=orbitron:wght@400;900|inter:wght@400;700" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=Instrument+Sans:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
   :root {
-    --black: #0a0a08;
-    --yellow: #f5c200;
-    --red: #cc2200;
-    --gray: #2a2a26;
-    --light: #b0ad9e;
-    --stripe-size: 48px;
+    --bg: #dcd8cd;
+    --ink: #1d1c19;
+    --muted: #5d5a51;
+    --dot: #a9a598;
+    --dot-hot: #c8321e;
+    --tag: #c8321e;
+    --tag-ink: #fff6ee;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
-
-  html, body {
-    height: 100%;
-    background: var(--black);
-    color: var(--light);
-    font-family: 'Share Tech Mono', monospace;
-    overflow: hidden;
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #17171a; --ink: #ece9e0; --muted: #9b978b;
+      --dot: #3a3a40; --dot-hot: #ff5a3c; --tag: #e23d25; --tag-ink: #fff6ee;
+      color-scheme: dark;
+    }
   }
-
+  :root[data-theme="dark"] {
+    --bg: #17171a; --ink: #ece9e0; --muted: #9b978b;
+    --dot: #3a3a40; --dot-hot: #ff5a3c; --tag: #e23d25; --tag-ink: #fff6ee;
+    color-scheme: dark;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { height: 100%; scroll-padding-top: env(safe-area-inset-top, 0px); }
   body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+    height: 100%; background: var(--bg); color: var(--ink);
+    font-family: 'Instrument Sans', system-ui, sans-serif;
+    overflow: hidden; position: relative;
   }
+  #dots { position: fixed; inset: 0; width: 100%; height: 100%; }
 
-  /* Noise overlay */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-    opacity: 0.04;
+  main {
+    position: relative; z-index: 2; height: 100%;
+    display: grid; grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center; gap: clamp(1rem, 6vw, 6rem);
+    padding: 0 clamp(1.25rem, 7vw, 7rem);
     pointer-events: none;
-    z-index: 10;
   }
-
-  /* Hazard tape top and bottom */
-  .tape {
-    position: fixed;
-    left: 0; right: 0;
-    height: 36px;
-    background: repeating-linear-gradient(
-      -45deg,
-      var(--yellow) 0,
-      var(--yellow) calc(var(--stripe-size) / 2),
-      var(--black) calc(var(--stripe-size) / 2),
-      var(--black) var(--stripe-size)
-    );
-    z-index: 20;
-  }
-  .tape-top { top: 0; }
-  .tape-bottom { bottom: 0; }
-
-  /* Scanlines */
-  .scanlines {
-    position: fixed;
-    inset: 0;
-    background: repeating-linear-gradient(
-      to bottom,
-      transparent 0px,
-      transparent 3px,
-      rgba(0,0,0,0.18) 3px,
-      rgba(0,0,0,0.18) 4px
-    );
-    pointer-events: none;
-    z-index: 5;
-  }
-
-  .center {
-    text-align: center;
-    position: relative;
-    z-index: 30;
-    padding: 0 2rem;
-  }
-
-  /* Warning icon */
-  .icon-wrap {
-    margin-bottom: 2rem;
-    display: flex;
-    justify-content: center;
-    animation: pulse 2.4s ease-in-out infinite;
-  }
-
-  .icon-wrap svg {
-    width: 72px;
-    height: 72px;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
-
-  /* Main heading */
+  .copy { max-width: 46rem; }
   h1 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(80px, 16vw, 200px);
-    line-height: 0.9;
-    letter-spacing: 0.04em;
-    color: var(--yellow);
-    position: relative;
-    display: inline-block;
-    text-transform: uppercase;
-    animation: glitch 5s infinite;
+    font-family: 'Big Shoulders Display', 'Arial Narrow', sans-serif;
+    font-weight: 900; font-size: clamp(5.5rem, 21vw, 17rem);
+    line-height: .82; letter-spacing: -.01em;
   }
-
-  h1::before,
-  h1::after {
-    content: 'außer Betrieb';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    overflow: hidden;
+  h1 span { display: block; white-space: nowrap; }
+  .lead { margin-top: 2rem; font-size: clamp(1.05rem, 1.6vw, 1.3rem); line-height: 1.5; max-width: 34ch; }
+  .meta { margin-top: .6rem; color: var(--muted); font-size: .95rem; font-variant-numeric: tabular-nums; }
+  .actions { margin-top: 2rem; display: flex; align-items: center; gap: 1.1rem; flex-wrap: wrap; pointer-events: auto; }
+  button {
+    font: 600 1rem 'Instrument Sans', sans-serif; cursor: pointer;
+    background: var(--ink); color: var(--bg); border: 0; border-radius: 999px;
+    padding: .85rem 1.6rem;
   }
+  button:focus-visible { outline: 3px solid var(--tag); outline-offset: 3px; }
+  #result { color: var(--muted); font-size: .95rem; min-height: 1.4em; }
 
-  h1::before {
-    color: var(--red);
-    clip-path: polygon(0 25%, 100% 25%, 100% 40%, 0 40%);
-    animation: glitch-r 5s infinite;
-    opacity: 0;
+  .lang {
+    position: fixed; z-index: 5; display: flex;
+    top: calc(env(safe-area-inset-top, 0px) + 1rem); right: clamp(1.25rem, 4vw, 2.5rem);
+    border: 1.5px solid var(--ink); border-radius: 999px; padding: 3px;
   }
+  .lang button { background: transparent; color: var(--ink); padding: .35rem .85rem; font-size: .9rem; }
+  .lang button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
 
-  h1::after {
-    color: #00e5ff;
-    clip-path: polygon(0 60%, 100% 60%, 100% 75%, 0 75%);
-    animation: glitch-b 5s infinite;
-    opacity: 0;
+  .hang { position: relative; width: 15rem; height: 100%; display: flex; justify-content: center; pointer-events: auto; }
+  .swing { transform-origin: 50% 0; position: absolute; top: 0; }
+  .string { width: 2px; height: clamp(4rem, 20vh, 12rem); background: var(--ink); margin: 0 auto; opacity: .7; }
+  .tag {
+    width: 13rem; padding: 2.6rem 1.4rem 1.6rem; position: relative;
+    background: var(--tag); color: var(--tag-ink);
+    clip-path: polygon(0 12%, 12% 0, 88% 0, 100% 12%, 100% 100%, 0 100%);
+    box-shadow: 0 18px 30px -10px rgba(0,0,0,.35);
   }
-
-  @keyframes glitch {
-    0%, 92%, 100% { transform: none; }
-    93% { transform: skewX(-2deg); }
-    94% { transform: skewX(2deg) scaleX(1.01); }
-    95% { transform: none; }
-    97% { transform: skewX(-1deg); }
-    98% { transform: none; }
+  .tag::before {
+    content: ''; position: absolute; top: .9rem; left: 50%; width: 1rem; height: 1rem;
+    margin-left: -.5rem; border-radius: 50%; background: var(--bg);
   }
+  .tag b { display: block; font: 900 2.3rem/.95 'Big Shoulders Display', sans-serif; }
+  .tag p { margin-top: .9rem; font-size: .85rem; line-height: 1.4; }
+  .tag hr { border: 0; border-top: 1.5px solid currentColor; opacity: .6; margin: 1rem 0 .8rem; }
 
-  @keyframes glitch-r {
-    0%, 91%, 96%, 100% { opacity: 0; transform: none; }
-    92% { opacity: 1; transform: translate(-4px, 0); }
-    93% { opacity: 1; transform: translate(4px, 0); }
-    94% { opacity: 0; }
-    97% { opacity: 1; transform: translate(-2px, 0); }
-    98% { opacity: 0; }
-  }
-
-  @keyframes glitch-b {
-    0%, 91%, 96%, 100% { opacity: 0; transform: none; }
-    92% { opacity: 1; transform: translate(4px, 0); }
-    93% { opacity: 1; transform: translate(-4px, 0); }
-    94% { opacity: 0; }
-    97% { opacity: 1; transform: translate(3px, 0); }
-    98% { opacity: 0; }
-  }
-
-  /* Sub line */
-  .sub {
-    font-size: 13px;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--light);
-    margin-top: 1.5rem;
-    opacity: 0.6;
-    animation: blink-fade 3.5s infinite;
-  }
-
-  @keyframes blink-fade {
-    0%, 100% { opacity: 0.6; }
-    48% { opacity: 0.6; }
-    50% { opacity: 0.1; }
-    52% { opacity: 0.6; }
-    80% { opacity: 0.6; }
-    82% { opacity: 0.1; }
-    84% { opacity: 0.6; }
-  }
-
-  /* Status bar */
-  .status {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 2.5rem;
-    font-size: 12px;
-    letter-spacing: 0.15em;
-    color: var(--red);
-    text-transform: uppercase;
-  }
-
-  .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--red);
-    animation: blink-dot 1.1s steps(1) infinite;
-  }
-
-  @keyframes blink-dot {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-  }
-
-  /* Error code */
-  .error-code {
-    position: fixed;
-    bottom: 52px;
-    right: 1.5rem;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    color: var(--gray);
-    z-index: 25;
+  @media (max-width: 760px) {
+    main { grid-template-columns: 1fr; align-content: center; }
+    .hang { display: none; }
+    h1 { font-size: clamp(4.8rem, 26vw, 9rem); }
   }
 </style>
 </head>
 <body>
+<canvas id="dots" aria-hidden="true"></canvas>
 
-<div class="tape tape-top"></div>
-<div class="tape tape-bottom"></div>
-<div class="scanlines"></div>
-
-<div class="center">
-  <div class="icon-wrap">
-    <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="36,6 68,62 4,62" fill="none" stroke="#f5c200" stroke-width="4" stroke-linejoin="round"/>
-      <line x1="36" y1="28" x2="36" y2="44" stroke="#f5c200" stroke-width="5" stroke-linecap="round"/>
-      <circle cx="36" cy="53" r="3" fill="#f5c200"/>
-    </svg>
-  </div>
-
-  <h1>außer<br>Betrieb</h1>
-
-  <p class="sub">system offline &nbsp;·&nbsp; keine verbindung</p>
-
-  <div class="status">
-    <span class="dot"></span>
-    Fehler erkannt — bitte später erneut versuchen
-  </div>
+<div class="lang" role="group" aria-label="Sprache / Language">
+  <button type="button" data-l="de" aria-pressed="true">DE</button>
+  <button type="button" data-l="en" aria-pressed="false">EN</button>
 </div>
 
-<div class="error-code">ERR::SYS_HALT // 0x00FF</div>
+<main>
+  <section class="copy">
+    <h1 aria-label="außer Betrieb"><span data-s>außer</span><span data-s>Betrieb</span></h1>
+    <p class="lead" data-i="lead">Dieses System ist gerade nicht erreichbar. Wir arbeiten an der Wiederherstellung.</p>
+    <p class="meta" id="meta">Außer Betrieb seit 00:00:00</p>
+    <div class="actions">
+      <button id="retry" type="button" data-i="retry">Erneut prüfen</button>
+      <span id="result" role="status" aria-live="polite"></span>
+    </div>
+  </section>
 
+  <aside class="hang" aria-hidden="true">
+    <div class="swing" id="swingOuter">
+      <div class="swing" id="swingInner" style="position:relative">
+        <div class="string"></div>
+        <div class="tag">
+          <b data-i="tag1">Nicht<br>einschalten</b>
+          <hr>
+          <p data-i="tag2">Gesperrt wegen Störung. Nur autorisiertes Personal darf freigeben.</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script>
+(function () {
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- Dot grid (React Bits "DotGrid"-style, canvas + GSAP ticker) ---------- */
+  var cv = document.getElementById('dots'), ctx = cv.getContext('2d');
+  var dots = [], mx = -999, my = -999, GAP = 30, R = 140, dpr = 1, cDot, cHot;
+  function colors() {
+    var s = getComputedStyle(document.documentElement);
+    cDot = s.getPropertyValue('--dot').trim(); cHot = s.getPropertyValue('--dot-hot').trim();
+  }
+  function build() {
+    dpr = Math.min(devicePixelRatio || 1, 2);
+    cv.width = innerWidth * dpr; cv.height = innerHeight * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    dots = [];
+    for (var y = GAP / 2; y < innerHeight; y += GAP)
+      for (var x = GAP / 2; x < innerWidth; x += GAP)
+        dots.push({ ox: x, oy: y, x: x, y: y, vx: 0, vy: 0 });
+    colors();
+  }
+  addEventListener('resize', build);
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', colors);
+  addEventListener('pointermove', function (e) { mx = e.clientX; my = e.clientY; });
+  addEventListener('pointerleave', function () { mx = my = -999; });
+  build();
+  function draw() {
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    for (var i = 0; i < dots.length; i++) {
+      var d = dots[i], dx = d.x - mx, dy = d.y - my, dist = Math.hypot(dx, dy), near = dist < R;
+      if (near && !reduce) { var f = (1 - dist / R) * 3.2; d.vx += dx / (dist || 1) * f; d.vy += dy / (dist || 1) * f; }
+      d.vx += (d.ox - d.x) * 0.08; d.vy += (d.oy - d.y) * 0.08;
+      d.vx *= 0.82; d.vy *= 0.82; d.x += d.vx; d.y += d.vy;
+      var heat = near ? 1 - dist / R : 0;
+      ctx.fillStyle = heat > 0.15 ? cHot : cDot;
+      ctx.beginPath(); ctx.arc(d.x, d.y, 1.6 + heat * 2.4, 0, 6.2832); ctx.fill();
+    }
+  }
+  gsap.ticker.add(draw);
+
+  /* ---------- Scrambled headline (React Bits "DecryptedText"-style) ---------- */
+  var SET = 'abcdefghijklmnopqrstuvwxyz0123456789#%&*+=?';
+  function decrypt(el, delay) {
+    var final = el.textContent, state = { p: 0 };
+    el.style.minWidth = el.offsetWidth + 'px';
+    if (el._d) el._d.kill();
+    return el._d = gsap.to(state, {
+      p: 1, duration: 1.5, delay: delay, ease: 'power2.inOut',
+      onUpdate: function () {
+        var n = Math.floor(state.p * final.length), out = '';
+        for (var i = 0; i < final.length; i++)
+          out += i < n ? final[i] : SET[Math.floor(Math.random() * SET.length)];
+        el.textContent = out;
+      },
+      onComplete: function () { el.textContent = final; }
+    });
+  }
+  /* ---------- DE / EN ---------- */
+  var T = {
+    de: { title: 'außer Betrieb', l1: 'außer', l2: 'Betrieb',
+      lead: 'Dieses System ist gerade nicht erreichbar. Wir arbeiten an der Wiederherstellung.',
+      since: 'Außer Betrieb seit ', retry: 'Erneut prüfen',
+      checking: 'Verbindung wird geprüft …', fail: 'Noch nicht erreichbar. Bitte später erneut versuchen.',
+      tag1: 'Nicht<br>einschalten', tag2: 'Gesperrt wegen Störung. Nur autorisiertes Personal darf freigeben.' },
+    en: { title: 'out of service', l1: 'out of', l2: 'service',
+      lead: 'This system is currently unavailable. We are working on restoring it.',
+      since: 'Out of service for ', retry: 'Check again',
+      checking: 'Checking connection …', fail: 'Still unreachable. Please try again later.',
+      tag1: 'Do not<br>switch on', tag2: 'Locked due to a fault. Only authorized staff may release it.' }
+  };
+  var lang = '', rk = '';
+  try { lang = localStorage.getItem('lang') || ''; } catch (e) {}
+  if (lang !== 'de' && lang !== 'en') lang = /^de/i.test(navigator.language || '') ? 'de' : 'en';
+  function apply(animate) {
+    var t = T[lang], ls = document.querySelectorAll('[data-s]');
+    document.documentElement.lang = lang;
+    document.title = t.title;
+    ls.forEach(function (l, i) { l.style.minWidth = ''; l.textContent = i ? t.l2 : t.l1; });
+    document.querySelector('h1').setAttribute('aria-label', t.l1 + ' ' + t.l2);
+    document.querySelectorAll('[data-i]').forEach(function (el) { el.innerHTML = t[el.dataset.i]; });
+    document.querySelectorAll('.lang button').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.l === lang));
+    });
+    document.getElementById('result').textContent = rk ? t[rk] : '';
+    if (t0) tick();
+    if (animate && !reduce) ls.forEach(function (l, i) { decrypt(l, i * 0.12); });
+  }
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      if (lang === b.dataset.l) return;
+      lang = b.dataset.l;
+      try { localStorage.setItem('lang', lang); } catch (e) {}
+      apply(true);
+    });
+  });
+  apply(false);
+
+  var lines = document.querySelectorAll('[data-s]');
+  if (!reduce) {
+    lines.forEach(function (l, i) { decrypt(l, 0.2 + i * 0.35); });
+    gsap.from('.lead, .meta, .actions', { opacity: 0, y: 14, duration: .7, delay: 1.5, stagger: .12, ease: 'power2.out' });
+    gsap.from('#swingOuter', { y: '-110%', duration: 1.4, delay: .9, ease: 'bounce.out' });
+
+    /* hanging tag: idle sway + pointer push */
+    gsap.fromTo('#swingInner', { rotation: -3.5 }, { rotation: 3.5, duration: 2.8, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+    var tilt = gsap.quickTo('#swingOuter', 'rotation', { duration: 1.2, ease: 'elastic.out(1,.4)' });
+    addEventListener('pointermove', function (e) {
+      tilt(gsap.utils.clamp(-14, 14, (e.clientX / innerWidth - 0.75) * 40));
+    });
+    document.querySelector('.tag').addEventListener('click', function () {
+      gsap.fromTo('#swingOuter', { rotation: 22 }, { rotation: 0, duration: 2.2, ease: 'elastic.out(1,.25)' });
+    });
+  }
+
+  /* ---------- Downtime counter ---------- */
+  var t0 = Date.now(), meta = document.getElementById('meta');
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function tick() {
+    var s = Math.floor((Date.now() - t0) / 1000);
+    meta.textContent = T[lang].since + pad(Math.floor(s / 3600)) + ':' + pad(Math.floor(s % 3600 / 60)) + ':' + pad(s % 60);
+  }
+  tick(); setInterval(tick, 1000);
+
+  /* ---------- Retry ---------- */
+  var btn = document.getElementById('retry'), out = document.getElementById('result'), busy = false;
+  btn.addEventListener('click', function () {
+    if (busy) return; busy = true;
+    rk = 'checking'; out.textContent = T[lang].checking; btn.disabled = true;
+    setTimeout(function () {
+      rk = 'fail'; out.textContent = T[lang].fail;
+      btn.disabled = false; busy = false;
+      if (!reduce) gsap.fromTo('.copy h1', { x: -10 }, { x: 0, duration: .8, ease: 'elastic.out(1.2,.3)' });
+    }, 1400);
+  });
+})();
+</script>
 </body>
 </html>
